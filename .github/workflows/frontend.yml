@@ -1,0 +1,29 @@
+name: Frontend
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    name: Tipos, lint y exportación web
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Instalar
+        run: npm ci
+      - name: Exportar web (genera también los tipos de Expo Router)
+        run: npm run export:web
+      - name: Tipos
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
